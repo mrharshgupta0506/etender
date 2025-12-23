@@ -19,7 +19,7 @@ const AdminDashboard = () => {
     const fetchTenders = async () => {
       try {
         setLoading(true);
-        const res = await apiClient.get('/tenders');
+        const res = await apiClient.get('/admin/tenders');
         setTenders(res.data || []);
       } catch (err) {
         setError(err.response?.data?.message || 'Failed to load tenders');

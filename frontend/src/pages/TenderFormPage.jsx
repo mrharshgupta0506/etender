@@ -26,7 +26,7 @@ const TenderFormPage = () => {
       if (!isEdit) return;
       try {
         setLoading(true);
-        const res = await apiClient.get(`/tenders/${id}/bids`);
+        const res = await apiClient.get(`/admin/tenders/${id}/bids`);
         const tender = res.data.tender;
 
         const formatDateTimeLocal = (date) => {
@@ -91,9 +91,9 @@ const TenderFormPage = () => {
     try {
       setLoading(true);
       if (isEdit) {
-        await apiClient.put(`/tenders/${id}`, payload);
+        await apiClient.put(`/admin/tenders/${id}`, payload);
       } else {
-        await apiClient.post('/tenders', payload);
+        await apiClient.post('/admin/tenders', payload);
       }
       navigate('/admin');
     } catch (err) {

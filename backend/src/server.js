@@ -21,7 +21,7 @@ app.get('/health', (req, res) => {
 });
 
 app.use('/auth', authRoutes);
-app.use('/', adminRoutes);
+app.use('/admin', adminRoutes);
 app.use('/', bidderRoutes);
 
 app.use(errorHandler);
