@@ -36,8 +36,8 @@ const sendInvitationEmail = async ({ to, tender, isNewUser, password, userEmail 
 
   let text = `You have been invited to participate in the tender "${tender.name}".\n\n`;
   text += `Description: ${tender.description}\n`;
-  text += `Start Date: ${tender.startDate.toISOString()}\n`;
-  text += `End Date: ${tender.endDate.toISOString()}\n\n`;
+  text += `Start Date: ${new Date(tender.startDate).toLocaleString()}\n`;
+  text += `End Date: ${new Date(tender.endDate).toLocaleString()}\n\n`;
   text += `Access the tender here: ${tenderLink}\n\n`;
 
   if (isNewUser) {

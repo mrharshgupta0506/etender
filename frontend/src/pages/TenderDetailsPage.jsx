@@ -28,6 +28,7 @@ const TenderDetailsPage = () => {
       try {
         setLoading(true);
         const res = await apiClient.get(`/tenders/${id}/bids`);
+        console.log("Response data:", res.data);
         setData(res.data);
       } catch (err) {
         setError(err.response?.data?.message || 'Failed to load tender');
@@ -113,7 +114,7 @@ const TenderDetailsPage = () => {
     setAwardError('');
     try {
       setAwardSaving(true);
-      const res = await apiClient.post(`/tenders/${id}/award`, { bidId });
+      const res = await apiClient.post(`/admin/tenders/${id}/award`, { bidId });
       setData((prev) => ({
         ...prev,
         tender: res.data
