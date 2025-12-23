@@ -2,6 +2,17 @@ const createTransporter = require('../config/email');
 
 const transporter = createTransporter();
 
+// Verify transporter if it exists
+if (transporter) {
+  transporter.verify((error, success) => {
+    if (error) {
+      console.error('SMTP transporter verification failed:', error);
+    } else {
+      console.log('SMTP transporter is ready to send emails');
+    }
+  });
+}
+
 const getFrontendBaseUrl = () => process.env.FRONTEND_BASE_URL || 'http://localhost:5173';
 
 const safeSendMail = async (options) => {
@@ -9,7 +20,13 @@ const safeSendMail = async (options) => {
     console.log('Email not sent (no transporter configured):', options.subject);
     return;
   }
-  await transporter.sendMail(options);
+  try {
+    await transporter.sendMail(options);
+    console.log('Email sent successfully:', options.subject);
+  } catch (error) {
+    console.error('Failed to send email:', options.subject, error.message);
+    throw error; // Re-throw to let caller handle
+  }
 };
 
 const sendInvitationEmail = async ({ to, tender, isNewUser, password, userEmail }) => {

@@ -40,7 +40,8 @@ const createTender = async (req, res, next) => {
       maxBidPrice,
       startDate,
       endDate,
-      invitedEmails
+      invitedEmails,
+      status
     } = req.body;
 
     if (!name || !description || !startDate || !endDate) {
@@ -56,8 +57,13 @@ const createTender = async (req, res, next) => {
       startDate,
       endDate,
       invitedEmails: (invitedEmails || []).map((e) => e.toLowerCase().trim()),
-      status: 'draft'
+      status: status || 'draft'
     });
+
+    // If published, handle user creation and invitations
+    if (tender.status === 'published') {
+      await handleTenderPublication(tender);
+    }
 
     res.status(201).json(attachDisplayStatus(tender));
   } catch (err) {

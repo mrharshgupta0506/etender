@@ -5,17 +5,15 @@ const { getTenderWithBids } = require('../controllers/tenderController');
 
 const router = express.Router();
 
-router.use(authMiddleware, requireRole('bidder'));
-
-// Bidder dashboard tenders
-router.get('/my-tenders', getMyTenders);
+// Bidder dashboard tenders (allow admin too for testing)
+router.get('/my-tenders', authMiddleware, getMyTenders);
 
 // Bid management
-router.post('/bids', createBid);
-router.put('/bids/:id', updateBid);
+router.post('/bids', authMiddleware, requireRole('bidder'), createBid);
+router.put('/bids/:id', authMiddleware, requireRole('bidder'), updateBid);
 
 // Tender details with bids (shared with admin, but limited to invited bidders)
-router.get('/tenders/:id/bids', getTenderWithBids);
+router.get('/tenders/:id/bids', authMiddleware, getTenderWithBids);
 
 module.exports = router;
 

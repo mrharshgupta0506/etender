@@ -24,13 +24,15 @@ const validateBidAmount = (tender, bidAmount) => {
   }
 };
 
-// GET /my-tenders (bidder)
+// GET /my-tenders (bidder or admin)
 const getMyTenders = async (req, res, next) => {
   try {
     const email = req.user.email.toLowerCase();
-    const tenders = await Tender.find({
-      invitedEmails: email
-    })
+    const isAdmin = req.user.role === 'admin';
+
+    const tenders = await Tender.find(
+      isAdmin ? {} : { invitedEmails: email }
+    )
       .sort({ createdAt: -1 })
       .lean();
 
