@@ -8,6 +8,8 @@ import TenderFormPage from './pages/TenderFormPage';
 import TenderDetailsPage from './pages/TenderDetailsPage';
 import BidderDashboard from './pages/BidderDashboard';
 import ChangePasswordPage from './pages/ChangePasswordPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 import { useAuth } from './context/AuthContext';
 
 const App = () => {
@@ -26,6 +28,8 @@ const App = () => {
       <Routes>
         <Route path="/" element={homeRedirect} />
         <Route path="/login" element={<LoginWithRedirect />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
 
         <Route
           path="/admin"

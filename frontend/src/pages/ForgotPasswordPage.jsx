@@ -1,37 +1,30 @@
 import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import apiClient from '../api/axiosClient';
-import { useAuth } from '../context/AuthContext';
 
-const LoginPage = ({ redirectTo }) => {
+const ForgotPasswordPage = () => {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
-  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setMessage('');
 
-    if (!email || !password) {
-      setError('Email and password are required');
+    if (!email) {
+      setError('Email is required');
       return;
     }
 
     try {
       setLoading(true);
-      const res = await apiClient.post('/auth/login', { email, password });
-      login(res.data.token, res.data.user);
-
-      // If there is a redirect path (e.g., from a tender link), honor it
-      const redirect =
-        redirectTo || location.state?.from || (res.data.user.role === 'admin' ? '/admin' : '/bidder');
-      navigate(redirect, { replace: true });
+      await apiClient.post('/auth/forgot-password', { email });
+      setMessage('If an account with that email exists, a password reset link has been sent.');
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed');
+      setError(err.response?.data?.message || 'Failed to send reset email');
     } finally {
       setLoading(false);
     }
@@ -40,10 +33,15 @@ const LoginPage = ({ redirectTo }) => {
   return (
     <div className="flex items-center justify-center">
       <div className="max-w-md w-full bg-white rounded-lg shadow-sm p-6">
-        <h1 className="text-xl font-semibold mb-4 text-gray-800">Login</h1>
+        <h1 className="text-xl font-semibold mb-4 text-gray-800">Forgot Password</h1>
         {error && (
           <div className="mb-3 rounded border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
             {error}
+          </div>
+        )}
+        {message && (
+          <div className="mb-3 rounded border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-700">
+            {message}
           </div>
         )}
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -58,31 +56,20 @@ const LoginPage = ({ redirectTo }) => {
               required
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
-              className="w-full px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base font-normal placeholder-gray-400"
-              required
-            />
-          </div>
           <button
             type="submit"
             disabled={loading}
             className="w-full inline-flex justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-60"
           >
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? 'Sending...' : 'Send Reset Link'}
           </button>
         </form>
         <div className="mt-4 text-center">
           <button
-            onClick={() => navigate('/forgot-password')}
+            onClick={() => navigate('/login')}
             className="text-sm text-indigo-600 hover:text-indigo-500"
           >
-            Forgot Password?
+            Back to Login
           </button>
         </div>
       </div>
@@ -90,6 +77,4 @@ const LoginPage = ({ redirectTo }) => {
   );
 };
 
-export default LoginPage;
-
-
+export default ForgotPasswordPage;
