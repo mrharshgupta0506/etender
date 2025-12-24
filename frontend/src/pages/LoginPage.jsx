@@ -53,7 +53,8 @@ const LoginPage = ({ redirectTo }) => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+              placeholder="Enter your email address"
+              className="w-full px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base font-normal placeholder-gray-400"
               required
             />
           </div>
@@ -63,7 +64,8 @@ const LoginPage = ({ redirectTo }) => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+              placeholder="Enter your password"
+              className="w-full px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base font-normal placeholder-gray-400"
               required
             />
           </div>
@@ -75,6 +77,14 @@ const LoginPage = ({ redirectTo }) => {
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
+        <div className="mt-4 text-center">
+          <button
+            onClick={() => navigate('/forgot-password')}
+            className="text-sm text-indigo-600 hover:text-indigo-500"
+          >
+            Forgot Password?
+          </button>
+        </div>
       </div>
     </div>
   );

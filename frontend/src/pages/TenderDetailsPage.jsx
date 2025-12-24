@@ -22,11 +22,8 @@ const TenderDetailsPage = () => {
   const [bidSaving, setBidSaving] = useState(false);
   const [awardError, setAwardError] = useState('');
   const [awardSaving, setAwardSaving] = useState(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
+const fetchData = async () => {
       try {
-        setLoading(true);
         const res = await apiClient.get(`/tenders/${id}/bids`);
         console.log("Response data:", res.data);
         setData(res.data);
@@ -36,6 +33,7 @@ const TenderDetailsPage = () => {
         setLoading(false);
       }
     };
+  useEffect(() => {
     fetchData();
   }, [id]);
 
@@ -102,6 +100,7 @@ const TenderDetailsPage = () => {
           bids: [...prev.bids, res.data]
         }));
       }
+      fetchData()
     } catch (err) {
       setBidError(err.response?.data?.message || 'Failed to submit bid');
     } finally {
@@ -206,24 +205,26 @@ const TenderDetailsPage = () => {
           )}
           <form onSubmit={handleBidSubmit} className="space-y-3">
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">Bid Amount</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Bid Amount</label>
               <input
                 type="number"
                 value={bidAmount}
                 onChange={(e) => setBidAmount(e.target.value)}
                 disabled={!canBidOrEdit}
-                className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+                placeholder="Enter your bid amount"
+                className="w-full px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base font-normal placeholder-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed"
                 required
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">Remarks</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Remarks</label>
               <textarea
                 value={remarks}
                 onChange={(e) => setRemarks(e.target.value)}
                 disabled={!canBidOrEdit}
-                rows={2}
-                className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+                placeholder="Enter any remarks (optional)"
+                rows={3}
+                className="w-full px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base font-normal placeholder-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed resize-none"
               />
             </div>
             <button

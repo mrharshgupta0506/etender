@@ -103,8 +103,8 @@ const TenderFormPage = () => {
     }
   };
 
-  const disableEditing = initialStartDate && new Date() >= initialStartDate;
-
+  // const disableEditing = initialStartDate && new Date() >= initialStartDate;
+ const disableEditing = false
   return (
     <div className="max-w-2xl">
       <h1 className="text-2xl font-semibold mb-4 text-gray-800">
@@ -123,7 +123,8 @@ const TenderFormPage = () => {
             value={form.name}
             onChange={handleChange}
             disabled={disableEditing}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+            placeholder="Enter tender name"
+            className="w-full px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base font-normal placeholder-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed"
             required
           />
         </div>
@@ -134,8 +135,9 @@ const TenderFormPage = () => {
             value={form.description}
             onChange={handleChange}
             disabled={disableEditing}
+            placeholder="Enter tender description"
             rows={4}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+            className="w-full px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base font-normal placeholder-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed resize-none"
             required
           />
         </div>
@@ -150,7 +152,8 @@ const TenderFormPage = () => {
               value={form.startBidPrice}
               onChange={handleChange}
               disabled={disableEditing}
-              className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+              placeholder="Enter starting bid price"
+              className="w-full px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base font-normal placeholder-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed"
             />
           </div>
           <div>
@@ -163,7 +166,8 @@ const TenderFormPage = () => {
               value={form.maxBidPrice}
               onChange={handleChange}
               disabled={disableEditing}
-              className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+              placeholder="Enter maximum bid price"
+              className="w-full px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base font-normal placeholder-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed"
             />
           </div>
         </div>
@@ -176,7 +180,7 @@ const TenderFormPage = () => {
               value={form.startDate}
               onChange={handleChange}
               disabled={disableEditing}
-              className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+              className="w-full px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base font-normal disabled:bg-gray-100 disabled:cursor-not-allowed"
               required
             />
           </div>
@@ -188,7 +192,7 @@ const TenderFormPage = () => {
               value={form.endDate}
               onChange={handleChange}
               disabled={disableEditing}
-              className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+              className="w-full px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base font-normal disabled:bg-gray-100 disabled:cursor-not-allowed"
               required
             />
           </div>
@@ -201,9 +205,10 @@ const TenderFormPage = () => {
             name="invitedEmails"
             value={form.invitedEmails}
             onChange={handleChange}
-            disabled={disableEditing}
+            disabled={isEdit}
+            placeholder="Enter email addresses separated by commas"
             rows={3}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+            className="w-full px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base font-normal placeholder-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed resize-none"
           />
         </div>
         <div>
@@ -213,7 +218,7 @@ const TenderFormPage = () => {
             value={form.status}
             onChange={handleChange}
             disabled={disableEditing}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+            className="w-full px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base font-normal disabled:bg-gray-100 disabled:cursor-not-allowed"
           >
             <option value="draft">Draft</option>
             <option value="published">Published</option>
