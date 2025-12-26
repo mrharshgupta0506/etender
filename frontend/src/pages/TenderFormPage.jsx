@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
 import { useNavigate, useParams } from 'react-router-dom';
 import apiClient from '../api/axiosClient';
 
@@ -18,6 +19,7 @@ const TenderFormPage = () => {
     status: 'draft'
   });
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
   const [initialStartDate, setInitialStartDate] = useState(null);
 
@@ -68,23 +70,54 @@ const TenderFormPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
 
-    if (!form.name || !form.description || !form.startDate || !form.endDate) {
-      setError('Name, description, start date, and end date are required');
+    // Validation
+    if (!form.name.trim() || !form.description.trim() || !form.startDate || !form.endDate || !form.startBidPrice || !form.maxBidPrice || !form.invitedEmails.trim()) {
+      setError('All fields are required.');
+      return;
+    }
+
+    // Validate bid prices
+    const startBid = Number(form.startBidPrice);
+    const maxBid = Number(form.maxBidPrice);
+    if (isNaN(startBid) || isNaN(maxBid) || startBid < 0 || maxBid < 0) {
+      setError('Bid prices must be valid positive numbers.');
+      return;
+    }
+    if (startBid > maxBid) {
+      setError('Start Bid Price must be less than or equal to Max Bid Price.');
+      return;
+    }
+
+    // Validate date logic
+    const startDate = dayjs(form.startDate);
+    const endDate = dayjs(form.endDate);
+    if (!startDate.isValid() || !endDate.isValid()) {
+      setError('Please provide valid start and end dates.');
+      return;
+    }
+    if (endDate.isBefore(startDate)) {
+      setError('End Date must be after Start Date.');
+      return;
+    }
+
+    // Validate emails
+    const emails = form.invitedEmails.split(',').map(e => e.trim()).filter(Boolean);
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (emails.length === 0 || !emails.every(email => emailRegex.test(email))) {
+      setError('Please provide valid email addresses, separated by commas.');
       return;
     }
 
     const payload = {
-      name: form.name,
-      description: form.description,
-      startBidPrice: form.startBidPrice === '' ? undefined : Number(form.startBidPrice),
-      maxBidPrice: form.maxBidPrice === '' ? undefined : Number(form.maxBidPrice),
-      startDate: new Date(form.startDate),
-      endDate: new Date(form.endDate),
-      invitedEmails: form.invitedEmails
-        .split(',')
-        .map((e) => e.trim())
-        .filter(Boolean),
+      name: form.name.trim(),
+      description: form.description.trim(),
+      startBidPrice: startBid,
+      maxBidPrice: maxBid,
+      startDate: startDate.toDate(),
+      endDate: endDate.toDate(),
+      invitedEmails: emails,
       status: form.status
     };
 
@@ -95,7 +128,8 @@ const TenderFormPage = () => {
       } else {
         await apiClient.post('/admin/tenders', payload);
       }
-      navigate('/admin');
+      setSuccess('Tender saved successfully!');
+      setTimeout(() => navigate('/admin'), 1200);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to save tender');
     } finally {
@@ -113,6 +147,11 @@ const TenderFormPage = () => {
       {error && (
         <div className="mb-3 rounded border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
           {error}
+        </div>
+      )}
+      {success && (
+        <div className="mb-3 rounded border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-700">
+          {success}
         </div>
       )}
       <form onSubmit={handleSubmit} className="space-y-4 bg-white rounded-lg shadow-sm p-6">
@@ -144,7 +183,7 @@ const TenderFormPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Start Bid Price (optional)
+              Start Bid Price
             </label>
             <input
               type="number"
@@ -154,11 +193,12 @@ const TenderFormPage = () => {
               disabled={disableEditing}
               placeholder="Enter starting bid price"
               className="w-full px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base font-normal placeholder-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed"
+              required
             />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Max Bid Price (optional)
+              Max Bid Price
             </label>
             <input
               type="number"
@@ -168,6 +208,7 @@ const TenderFormPage = () => {
               disabled={disableEditing}
               placeholder="Enter maximum bid price"
               className="w-full px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base font-normal placeholder-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed"
+              required
             />
           </div>
         </div>
@@ -209,6 +250,7 @@ const TenderFormPage = () => {
             placeholder="Enter email addresses separated by commas"
             rows={3}
             className="w-full px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base font-normal placeholder-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed resize-none"
+            required
           />
         </div>
         <div>

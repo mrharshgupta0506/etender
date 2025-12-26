@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import apiClient from '../api/axiosClient';
 import { useAuth } from '../context/AuthContext';
+import { isUserLoggedIn } from '../utils/user';
 
 const LoginPage = ({ redirectTo }) => {
   const [email, setEmail] = useState('');
@@ -36,7 +37,11 @@ const LoginPage = ({ redirectTo }) => {
       setLoading(false);
     }
   };
-
+  useEffect(() => { 
+    if(isUserLoggedIn()){
+      navigate(redirectTo || '/', { replace: true });
+    }
+  }, [navigate, redirectTo]);
   return (
     <div className="flex items-center justify-center">
       <div className="max-w-md w-full bg-white rounded-lg shadow-sm p-6">

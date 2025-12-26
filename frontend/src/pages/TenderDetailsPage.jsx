@@ -1,7 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import dayjs from 'dayjs';
 import { useParams } from 'react-router-dom';
 import apiClient from '../api/axiosClient';
 import { useAuth } from '../context/AuthContext';
+import { formatDate } from '../utils/user';
 
 const statusBadgeClasses = {
   Upcoming: 'bg-blue-50 text-blue-700 ring-blue-600/20',
@@ -155,13 +157,13 @@ const fetchData = async () => {
             <span>
               Start:{' '}
               <span className="font-medium text-gray-700">
-                {tender.startDate ? new Date(tender.startDate).toLocaleString() : '-'}
+                {tender.startDate ? formatDate(tender.startDate) : '-'}
               </span>
             </span>
             <span>
               End:{' '}
               <span className="font-medium text-gray-700">
-                {tender.endDate ? new Date(tender.endDate).toLocaleString() : '-'}
+                {tender.endDate ? formatDate(tender.endDate) : '-'}
               </span>
             </span>
             {typeof tender.startBidPrice === 'number' && (
@@ -284,7 +286,7 @@ const fetchData = async () => {
                         {bid.remarks || <span className="text-gray-400">—</span>}
                       </td>
                       <td className="px-3 py-2 text-gray-500">
-                        {bid.createdAt ? new Date(bid.createdAt).toLocaleString() : '-'}
+                        {bid.createdAt ? dayjs(bid.createdAt).format('YYYY-MM-DD HH:mm') : '-'}
                       </td>
                       {user?.role === 'admin' && (
                         <td className="px-3 py-2 text-right">

@@ -117,7 +117,7 @@ const sendInvitationEmail = async ({ to, tender, isNewUser, password, userEmail 
         </div>
 
         <div style="text-align: center;">
-          <a href="${tenderLink}" class="cta-button">View Tender Details & Submit Bid</a>
+          <a href="${tenderLink}" class="cta-button" style="color: white;">View Tender Details & Submit Bid</a>
         </div>
 
         ${isNewUser ? `

@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { format } from 'date-fns';
 import { Link, useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
 import apiClient from '../api/axiosClient';
+import { formatDate } from '../utils/user';
 
 const statusBadgeClasses = {
   Upcoming: 'bg-blue-50 text-blue-700 ring-blue-600/20',
@@ -78,10 +81,10 @@ const AdminDashboard = () => {
                   </td>
                   <td className="px-4 py-3 text-sm text-gray-700">{tender.bidCount || 0}</td>
                   <td className="px-4 py-3 text-xs text-gray-500">
-                    {tender.startDate ? new Date(tender.startDate).toLocaleString() : '-'}
+                    {tender.startDate ? formatDate(tender.startDate) : '-'}
                   </td>
                   <td className="px-4 py-3 text-xs text-gray-500">
-                    {tender.endDate ? new Date(tender.endDate).toLocaleString() : '-'}
+                    {tender.endDate ? formatDate(tender.endDate) : '-'}
                   </td>
                   <td className="px-4 py-3 text-right text-xs">
                     <div className="flex justify-end gap-2">
