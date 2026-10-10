@@ -319,3 +319,4 @@ const fetchData = async () => {
 export default TenderDetailsPage;
 
 
+
